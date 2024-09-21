@@ -1,0 +1,35 @@
+SWTOR Patch Downloader for NEW LAUNCHER by RealymanLP
+https://www.youtube.com/c/RealymanLP
+
+The program is written in Python and should run without any program instalations.
+
+ 1. Open the file "patchdownloader_installer.exe"
+ 2. Select the product
+ 3. Select the environment
+ 4. Select the language
+ 5. Check "Search for new version?", if you want the program to automatically check for a new version.
+    If a new version is found, old version information is renamed and numbered.
+ 6. Chose the location, where you want to save the files. You have to use "/" instead of "\"
+    Use the button "Select Directory" to select it directly
+ 7. Select the Download-file-structure.
+    cdn - Downloaded files will get sorted like on the cdn. Good to create a copy of the cdn.
+    subdirectorys - Downloaded files will get sorted in subdirectorys -> /{env}/{product}/{files}
+    root - Downloaded files will get downloaded directly into the selected directory
+ 8. Check "Download other version?" and click "Search all versions" to get other builds of the
+    selected version.
+ 9. OPTIONAL If you want to install the downloaded files directly, check "Install files?"
+10. OPTIONAL Chose the location, where you want to have the patch installed.
+11. Click "Download & Install" to get the patch.
+    Click "See creation date" to see the date, when the version got released (probably not correct 
+    at the moment)
+
+Console Mode:
+1. Open cmd.exe in the current dirctory.
+2. Run "patchdownloader_newlauncher.exe -?"
+3. Run "patchdownloader_newlauncher.exe" with the given parameters to download (and install)
+   your version
+
+If you have any questions or if you found a bug, 
+just DM me on Discord RealygirlLP#7726
+
+Thanks to Pazaz#0001 for creating the Installing-Method!
