@@ -41,18 +41,45 @@ except:
     pass
 
 try:
-    os.remove(os.path.join(dir_path, "patches_swtor.xml"))
-    wget.download("http://realymanlp.de/public/swtor_hashes/patches/patches_swtor.xml", dir_path)
+    md5_new = hashlib.md5(requests.get("http://realymanlp.de/public/swtor_hashes/patches/patches_swtor.xml").content.decode("utf-8").encode('utf-8')).hexdigest()
+    try:
+        md5_old = hashlib.md5(open(f"{dir_path}/patches_swtor.xml").read().encode('utf-8')).hexdigest()
+    except:
+        md5_old = ""
+    if not md5_old == md5_new:
+        try:
+            os.remove(os.path.join(dir_path, f"{dir_path}/patches_swtor.xml"))
+        except:
+            pass
+        wget.download("http://realymanlp.de/public/swtor_hashes/patches/patches_swtor.xml", dir_path)
 except:
     pass
 try:
-    os.remove(os.path.join(dir_path, "patches_liveqatest.xml"))
-    wget.download("http://realymanlp.de/public/swtor_hashes/patches/patches_liveqatest.xml", dir_path)
+    md5_new = hashlib.md5(requests.get("http://realymanlp.de/public/swtor_hashes/patches/patches_publictest.xml").content.decode("utf-8").encode('utf-8')).hexdigest()
+    try:
+        md5_old = hashlib.md5(open(f"{dir_path}/patches_publictest.xml").read().encode('utf-8')).hexdigest()
+    except:
+        md5_old = ""
+    if not md5_old == md5_new:
+        try:
+            os.remove(os.path.join(dir_path, f"{dir_path}/patches_publictest.xml"))
+        except:
+            pass
+        wget.download("http://realymanlp.de/public/swtor_hashes/patches/patches_publictest.xml", dir_path)
 except:
     pass
 try:
-    os.remove(os.path.join(dir_path, "patches_publictest.xml"))
-    wget.download("http://realymanlp.de/public/swtor_hashes/patches/patches_publictest.xml", dir_path)
+    md5_new = hashlib.md5(requests.get("http://realymanlp.de/public/swtor_hashes/patches/patches_liveqatest.xml").content.decode("utf-8").encode('utf-8')).hexdigest()
+    try:
+        md5_old = hashlib.md5(open(f"{dir_path}/patches_liveqatest.xml").read().encode('utf-8')).hexdigest()
+    except:
+        md5_old = ""
+    if not md5_old == md5_new:
+        try:
+            os.remove(os.path.join(dir_path, f"{dir_path}/patches_liveqatest.xml"))
+        except:
+            pass
+        wget.download("http://realymanlp.de/public/swtor_hashes/patches/patches_liveqatest.xml", dir_path)
 except:
     pass
 
