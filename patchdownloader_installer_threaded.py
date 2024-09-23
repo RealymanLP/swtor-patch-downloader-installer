@@ -1914,7 +1914,7 @@ def install_files(saveloc, language_wert, vnummerx, environment_wert, vnummer, a
             alias_content = jwt.decode(alias_c, algorithms=["RS256"], options={"verify_signature": False})
             catalog_metafile_hex = alias_content[f"{assets}_{language_wert}.{environment_wert}"]
         except:
-            logbox.insert(END, "\nCan't find your version in alias.json. Please ensure you selected an empty folder for download. Please also check whether the desired product exists.\n")
+            logbox.insert(END, "\nVersion not found!\n\n")
             try:
                 log1_label.config(text=f"Version not found!")
             except:
@@ -1932,7 +1932,15 @@ def install_files(saveloc, language_wert, vnummerx, environment_wert, vnummer, a
         except:
             pass
     if savetype == "cdn":
-        metafile = open(f"{saveloc}/{environment_wert}/{assets}_{language_wert}/metafile/{catalog_metafile_hex}/metafile.json", "r")
+        try:
+            metafile = open(f"{saveloc}/{environment_wert}/{assets}_{language_wert}/metafile/{catalog_metafile_hex}/metafile.json", "r")
+        except:
+            logbox.insert(END, "\nVersion not found!\n\n")
+            try:
+                log1_label.config(text=f"Version not found!")
+            except:
+                pass
+            return
         if assets == "assets":
             shutil.copyfile(f"{saveloc}/{environment_wert}/{assets}_{language_wert}/metafile/{catalog_metafile_hex}/metafile.json", f"{installloc}/Assets/{assets}_{language_wert}.{environment_wert}.metafile.json")
             set_file_last_modified(f"{installloc}/Assets/{assets}_{language_wert}.{environment_wert}.metafile.json", os.path.getmtime(f"{saveloc}/{environment_wert}/{assets}_{language_wert}/metafile/{catalog_metafile_hex}/metafile.json"))
@@ -1940,7 +1948,15 @@ def install_files(saveloc, language_wert, vnummerx, environment_wert, vnummer, a
             shutil.copyfile(f"{saveloc}/{environment_wert}/{assets}_{language_wert}/metafile/{catalog_metafile_hex}/metafile.json", f"{installloc}/Movies/{language_wert.replace('_', '-')}/{assets}_{language_wert}.{environment_wert}.metafile.json")
             set_file_last_modified(f"{installloc}/Movies/{language_wert.replace('_', '-')}/{assets}_{language_wert}.{environment_wert}.metafile.json", os.path.getmtime(f"{saveloc}/{environment_wert}/{assets}_{language_wert}/metafile/{catalog_metafile_hex}/metafile.json"))
     elif savetype == "backup":
-        metafile = open(f"{saveloc}/{environment_wert}/{assets}_{language_wert}/metafile/{catalog_metafile_hex}/metafile.json", "r")
+        try:
+            metafile = open(f"{saveloc}/{environment_wert}/{assets}_{language_wert}/metafile/{catalog_metafile_hex}/metafile.json", "r")
+        except:
+            logbox.insert(END, "\nVersion not found!\n\n")
+            try:
+                log1_label.config(text=f"Version not found!")
+            except:
+                pass
+            return
         if assets == "assets":
             shutil.copyfile(f"{saveloc}/{environment_wert}/{assets}_{language_wert}/metafile/{catalog_metafile_hex}/metafile.json", f"{installloc}/Assets/{assets}_{language_wert}.{environment_wert}.metafile.json")
             set_file_last_modified(f"{installloc}/Assets/{assets}_{language_wert}.{environment_wert}.metafile.json", os.path.getmtime(f"{saveloc}/{environment_wert}/{assets}_{language_wert}/metafile/{catalog_metafile_hex}/metafile.json"))
@@ -1948,7 +1964,15 @@ def install_files(saveloc, language_wert, vnummerx, environment_wert, vnummer, a
             shutil.copyfile(f"{saveloc}/{environment_wert}/{assets}_{language_wert}/metafile/{catalog_metafile_hex}/metafile.json", f"{installloc}/Movies/{language_wert.replace('_', '-')}/{assets}_{language_wert}.{environment_wert}.metafile.json")
             set_file_last_modified(f"{installloc}/Movies/{language_wert.replace('_', '-')}/{assets}_{language_wert}.{environment_wert}.metafile.json", os.path.getmtime(f"{saveloc}/{environment_wert}/{assets}_{language_wert}/metafile/{catalog_metafile_hex}/metafile.json"))
     elif savetype == "root":
-        metafile = open(f"{saveloc}/metafile.json", "r")
+        try:
+            metafile = open(f"{saveloc}/metafile.json", "r")
+        except:
+            logbox.insert(END, "\nVersion not found!\n\n")
+            try:
+                log1_label.config(text=f"Version not found!")
+            except:
+                pass
+            return
         if assets == "assets":
             shutil.copyfile(f"{saveloc}/metafile.json", f"{installloc}/Assets/{assets}_{language_wert}.{environment_wert}.metafile.json")
             set_file_last_modified(f"{installloc}/Assets/{assets}_{language_wert}.{environment_wert}.metafile.json", os.path.getmtime(f"{saveloc}/metafile.json"))
@@ -2522,7 +2546,7 @@ def install_client(saveloc, language_wert, vnummerx, environment_wert, vnummer, 
             alias_content = jwt.decode(alias_c, algorithms=["RS256"], options={"verify_signature": False})
             catalog_metafile_hex = alias_content[f"{assets}.{environment_wert}"]
         except:
-            logbox.insert(END, "\nCan't find your version in alias.json. Please ensure you selected an empty folder for download. Please also check whether the desired product exists.\n")
+            logbox.insert(END, "\nVersion not found!\n\n")
             try:
                 log1_label.config(text=f"Version not found!")
             except:
@@ -2541,17 +2565,41 @@ def install_client(saveloc, language_wert, vnummerx, environment_wert, vnummer, 
             pass
     
     if savetype == "cdn":
-        metafile = open(f"{saveloc}/{environment_wert}/{assets}/metafile/{catalog_metafile_hex}/metafile.json", "r")
+        try:
+            metafile = open(f"{saveloc}/{environment_wert}/{assets}/metafile/{catalog_metafile_hex}/metafile.json", "r")
+        except:
+            logbox.insert(END, "\nVersion not found!\n\n")
+            try:
+                log1_label.config(text=f"Version not found!")
+            except:
+                pass
+            return
         if assets == "retailclient":
             shutil.copyfile(f"{saveloc}/{environment_wert}/{assets}/metafile/{catalog_metafile_hex}/metafile.json", f"{installloc}/{environment_wert}/{assets}/{assets}.{environment_wert}.metafile.json")
             set_file_last_modified(f"{installloc}/{environment_wert}/{assets}/{assets}.{environment_wert}.metafile.json", os.path.getmtime(f"{saveloc}/{environment_wert}/{assets}/metafile/{catalog_metafile_hex}/metafile.json"))
     elif savetype == "backup":
-        metafile = open(f"{saveloc}/{environment_wert}/{assets}/metafile/{catalog_metafile_hex}/metafile.json", "r")
+        try:
+            metafile = open(f"{saveloc}/{environment_wert}/{assets}/metafile/{catalog_metafile_hex}/metafile.json", "r")
+        except:
+            logbox.insert(END, "\nVersion not found!\n\n")
+            try:
+                log1_label.config(text=f"Version not found!")
+            except:
+                pass
+            return
         if assets == "retailclient":
             shutil.copyfile(f"{saveloc}/{environment_wert}/{assets}/metafile/{catalog_metafile_hex}/metafile.json", f"{installloc}/{environment_wert}/{assets}/{assets}.{environment_wert}.metafile.json")
             set_file_last_modified(f"{installloc}/{environment_wert}/{assets}/{assets}.{environment_wert}.metafile.json", os.path.getmtime(f"{saveloc}/{environment_wert}/{assets}/metafile/{catalog_metafile_hex}/metafile.json"))
     elif savetype == "root":
-        metafile = open(f"{saveloc}/metafile.json", "r")
+        try:
+            metafile = open(f"{saveloc}/metafile.json", "r")
+        except:
+            logbox.insert(END, "\nVersion not found!\n\n")
+            try:
+                log1_label.config(text=f"Version not found!")
+            except:
+                pass
+            return
         if assets == "retailclient":
             shutil.copyfile(f"{saveloc}/metafile.json", f"{installloc}/{environment_wert}/{assets}/{assets}.{environment_wert}.metafile.json")
             set_file_last_modified(f"{installloc}/{environment_wert}/{assets}/{assets}.{environment_wert}.metafile.json", os.path.getmtime(f"{saveloc}/metafile.json"))
@@ -2935,7 +2983,7 @@ def install_launcher(saveloc, language_wert, vnummerx, environment_wert, vnummer
             alias_content = jwt.decode(alias_c, algorithms=["RS256"], options={"verify_signature": False})
             catalog_metafile_hex = alias_content[f"{assets}.{environment_wert}"]
         except:
-            logbox.insert(END, "\nCan't find your version in alias.json. Please ensure you selected an empty folder for download. Please also check whether the desired product exists.\n")
+            logbox.insert(END, "\nVersion not found!\n\n")
             try:
                 log1_label.config(text=f"Version not found!")
             except:
@@ -2954,17 +3002,41 @@ def install_launcher(saveloc, language_wert, vnummerx, environment_wert, vnummer
             pass
     
     if savetype == "cdn":
-        metafile = open(f"{saveloc}/swtor/{assets}/metafile/{catalog_metafile_hex}/metafile.json", "r")
+        try:
+            metafile = open(f"{saveloc}/swtor/{assets}/metafile/{catalog_metafile_hex}/metafile.json", "r")
+        except:
+            logbox.insert(END, "\nVersion not found!\n\n")
+            try:
+                log1_label.config(text=f"Version not found!")
+            except:
+                pass
+            return
         if assets == "launcher":
             shutil.copyfile(f"{saveloc}/swtor/{assets}/metafile/{catalog_metafile_hex}/metafile.json", f"{installloc}/{assets}.{environment_wert}.metafile.json")
             set_file_last_modified(f"{installloc}/{assets}.{environment_wert}.metafile.json", os.path.getmtime(f"{saveloc}/swtor/{assets}/metafile/{catalog_metafile_hex}/metafile.json"))
     elif savetype == "backup":
-        metafile = open(f"{saveloc}/swtor/{assets}/metafile/{catalog_metafile_hex}/metafile.json", "r")
+        try:
+            metafile = open(f"{saveloc}/swtor/{assets}/metafile/{catalog_metafile_hex}/metafile.json", "r")
+        except:
+            logbox.insert(END, "\nVersion not found!\n\n")
+            try:
+                log1_label.config(text=f"Version not found!")
+            except:
+                pass
+            return
         if assets == "launcher":
             shutil.copyfile(f"{saveloc}/swtor/{assets}/metafile/{catalog_metafile_hex}/metafile.json", f"{installloc}/{assets}.{environment_wert}.metafile.json")
             set_file_last_modified(f"{installloc}/{assets}.{environment_wert}.metafile.json", os.path.getmtime(f"{saveloc}/swtor/{assets}/metafile/{catalog_metafile_hex}/metafile.json"))
     elif savetype == "root":
-        metafile = open(f"{saveloc}/metafile.json", "r")
+        try:
+            metafile = open(f"{saveloc}/metafile.json", "r")
+        except:
+            logbox.insert(END, "\nVersion not found!\n\n")
+            try:
+                log1_label.config(text=f"Version not found!")
+            except:
+                pass
+            return
         if assets == "launcher":
             shutil.copyfile(f"{saveloc}/metafile.json", f"{installloc}/{assets}.{environment_wert}.metafile.json")
             set_file_last_modified(f"{installloc}/{assets}.{environment_wert}.metafile.json", os.path.getmtime(f"{saveloc}/metafile.json"))
@@ -3727,7 +3799,7 @@ def download_client(saveloc, language_wert, vnummerx, environment_wert, vnummer,
                 alias_content = jwt.decode(alias_c, algorithms=["RS256"], options={"verify_signature": False})
                 catalog_metafile_hex = alias_content[f"{assets}.{environment_wert}"]
             except:
-                logbox.insert(END, "\nCan't find your version in alias.json. Please ensure you selected an empty folder for download. Please also check whether the desired product exists.\n")
+                logbox.insert(END, "\nVersion not found!\n\n")
                 try:
                     log1_label.config(text=f"Version not found!")
                 except:
@@ -4482,7 +4554,7 @@ def download_launcher(saveloc, language_wert, vnummerx, environment_wert, vnumme
                 alias_content = jwt.decode(alias_c, algorithms=["RS256"], options={"verify_signature": False})
                 catalog_metafile_hex = alias_content[f"{assets}.{environment_wert}"]
             except:
-                logbox.insert(END, "\nCan't find your version in alias.json. Please ensure you selected an empty folder for download. Please also check whether the desired product exists.\n")
+                logbox.insert(END, "\nVersion not found!\n\n")
                 try:
                     log1_label.config(text=f"Version not found!")
                 except:
@@ -5236,7 +5308,7 @@ def download_files(saveloc, language_wert, vnummerx, environment_wert, vnummer, 
                 alias_content = jwt.decode(alias_c, algorithms=["RS256"], options={"verify_signature": False})
                 catalog_metafile_hex = alias_content[f"{assets}_{language_wert}.{environment_wert}"]
             except Exception as e:
-                logbox.insert(END, "\nCan't find your version in alias.json. Please ensure you selected an empty folder for download. Please also check whether the desired product exists.\n")
+                logbox.insert(END, "\nVersion not found!\n\n")
                 try:
                     log1_label.config(text=f"Version not found!")
                 except:
@@ -5784,6 +5856,17 @@ def check_date():
             pass
         logbox.insert(END, "\nThis save-path doesn't exist!\n\n")
         return
+    try:
+        with open(f"{saveloc}/connection.dat", "w") as f:
+            f.close()
+        os.remove(f"{saveloc}/connection.dat")
+    except:
+        try:
+            log1_label.config(text=f"No writing permissions!")
+        except:
+            pass
+        logbox.insert(END, "\nYou are not permitted to write in this save-path!\n\n")
+        return
     if allow_custom_hex_var.get() == 1:
         catalog_metafile_hex = hex_zeile.get()
         oldversion = True
@@ -5795,6 +5878,7 @@ def check_date():
     except:
         installloc = ""
     installloc = installloc.rstrip()
+    
     if True:
         data = {}
         data['version'] = []
@@ -5889,7 +5973,7 @@ def check_date():
                         alias_content = jwt.decode(alias_c, algorithms=["RS256"], options={"verify_signature": False})
                         catalog_metafile_hex = alias_content[f"{assets}_{language_wert}.{environment_wert}"]
                     except:
-                        logbox.insert(END, "\nCan't find your version in alias.json. Please ensure you selected an empty folder for download. Please also check whether the desired product exists.\n")
+                        logbox.insert(END, "\nVersion not found!\n\n")
                         try:
                             log1_label.config(text=f"Version not found!")
                         except:
@@ -5982,7 +6066,7 @@ def check_date():
                         alias_content = jwt.decode(alias_c, algorithms=["RS256"], options={"verify_signature": False})
                         catalog_metafile_hex = alias_content[f"{assets}.{environment_wert}"]
                     except:
-                        logbox.insert(END, "\nCan't find your version in alias.json. Please ensure you selected an empty folder for download. Please also check whether the desired product exists.\n")
+                        logbox.insert(END, "\nVersion not found!\n\n")
                         try:
                             log1_label.config(text=f"Version not found!")
                         except:
@@ -6075,7 +6159,7 @@ def check_date():
                         alias_content = jwt.decode(alias_c, algorithms=["RS256"], options={"verify_signature": False})
                         catalog_metafile_hex = alias_content[f"{assets}.{environment_wert}"]
                     except:
-                        logbox.insert(END, "\nCan't find your version in alias.json. Please ensure you selected an empty folder for download. Please also check whether the desired product exists.\n")
+                        logbox.insert(END, "\nVersion not found!\n\n")
                         try:
                             log1_label.config(text=f"Version not found!")
                         except:
@@ -6132,7 +6216,11 @@ def check_date_thr():
     t1.start()
 
 def file_save():
-    folder_selected = filedialog.askdirectory()
+    cur_dir = ordnerzeile.get()
+    try:
+        folder_selected = filedialog.askdirectory(initialdir=cur_dir, title="Select the directory, where you want to download the files.")
+    except:
+        folder_selected = filedialog.askdirectory(title="Select the directory, where you want to download the files.")
     folder_selected = str(folder_selected)
     folder_selected = folder_selected.replace("\\", "/")
     if not folder_selected == "":
@@ -6140,7 +6228,11 @@ def file_save():
         ordnerzeile.insert(0, folder_selected)
 
 def install_save():
-    folder_selected = filedialog.askdirectory()
+    cur_dir = installzeile.get()
+    try:
+        folder_selected = filedialog.askdirectory(initialdir=cur_dir, title="Select the directory, where you want to install the files.")
+    except:
+        folder_selected = filedialog.askdirectory(title="Select the directory, where you want to install the files.")
     folder_selected = str(folder_selected)
     folder_selected = folder_selected.replace("\\", "/")
     if not folder_selected == "":
@@ -6191,6 +6283,17 @@ def button_action():
         logbox.insert(END, "\nThis save-path doesn't exist!\n\n")
         return
     try:
+        with open(f"{saveloc}/connection.dat", "w") as f:
+            f.close()
+        os.remove(f"{saveloc}/connection.dat")
+    except:
+        try:
+            log1_label.config(text=f"No writing permissions!")
+        except:
+            pass
+        logbox.insert(END, "\nYou are not permitted to write in this save-path!\n\n")
+        return
+    try:
         installloc = installzeile.get()
     except:
         installloc = ""
@@ -6202,6 +6305,18 @@ def button_action():
             pass
         logbox.insert(END, "\nPlease enter an installation-path!\n\n")
         return
+    if will_install:
+        try:
+            with open(f"{installloc}/connection.dat", "w") as f:
+                f.close()
+            os.remove(f"{installloc}/connection.dat")
+        except:
+            try:
+                log1_label.config(text=f"No writing permissions!")
+            except:
+                pass
+            logbox.insert(END, "\nYou are not permitted to write in this installation-path!\n\n")
+            return
     if not os.path.exists(installloc) and will_install:
         try:
             log1_label.config(text=f"This installation-path doesn't exist!")
@@ -6343,6 +6458,17 @@ def search_versions():
             pass
         logbox.insert(END, "\nThis save-path doesn't exist!\n\n")
         return
+    try:
+        with open(f"{saveloc}/connection.dat", "w") as f:
+            f.close()
+        os.remove(f"{saveloc}/connection.dat")
+    except:
+        try:
+            log1_label.config(text=f"No writing permissions!")
+        except:
+            pass
+        logbox.insert(END, "\nYou are not permitted to write in this save-path!\n\n")
+        return
     
     try:
         installloc = installzeile.get()
@@ -6390,20 +6516,15 @@ def search_versions():
         url = f"http://cdn-d6patch.swtor.com/{environment_wert}/{assets}_{language_wert}/{assets}_{language_wert}.history.json"
         try:
             creation_time_new = datetime.strptime(requests.get(url).headers["Last-Modified"], "%a, %d %b %Y %H:%M:%S %Z").timestamp()
-        except Exception as e:
-            try:
-                log1_label.config(text=f"Version not found!")
-            except:
-                pass
-            #version_box.delete(0, tkr.END)
-            logbox.insert(END, "\nVersion not found!\n\n")
-            return
+        except:
+            creation_time_new = None
         try:
             creation_time_old = os.path.getmtime(f"{saveloc}/{environment_wert}/{assets}_{language_wert}/{assets}_{language_wert}.history.json")
         except:
             creation_time_old = creation_time_new
-        if creation_time_old < creation_time_new:
-            os.remove(f"{saveloc}/{environment_wert}/{assets}_{language_wert}/{assets}_{language_wert}.history.json")
+        if not creation_time_new is None:
+            if creation_time_old < creation_time_new:
+                os.remove(f"{saveloc}/{environment_wert}/{assets}_{language_wert}/{assets}_{language_wert}.history.json")
         if True:
             if not os.path.exists(f"{saveloc}/{environment_wert}/{assets}_{language_wert}/{assets}_{language_wert}.history.json") == True:
                 try:
@@ -6429,11 +6550,11 @@ def search_versions():
                         return
                     else:
                         try:
-                            log1_label.config(text=f"Version not found!")
+                            log1_label.config(text=f"No versions found!")
                         except:
                             pass
                         version_box.delete(0, tkr.END)
-                        logbox.insert(END, "\nVersion not found!\n\n")
+                        logbox.insert(END, "\nNo versions found!\n\n")
                         return
 		
             try:
@@ -6458,9 +6579,9 @@ def search_versions():
                 log1_label.config(text=f"Found previous versions!")
                 return
             except Exception as e:
-                logbox.insert(END, "\nCan't find your version in alias.json. Please ensure you selected an empty folder for download. Please also check whether the desired product exists.\n")
+                logbox.insert(END, "\nNo versions found!\n\n")
                 try:
-                    log1_label.config(text=f"Version not found!")
+                    log1_label.config(text=f"No versions found!")
                 except:
                     pass
                 version_box.delete(0, tkr.END)
@@ -6476,19 +6597,14 @@ def search_versions():
         try:
             creation_time_new = datetime.strptime(requests.get(url).headers["Last-Modified"], "%a, %d %b %Y %H:%M:%S %Z").timestamp()
         except:
-            try:
-                log1_label.config(text=f"Version not found!")
-            except:
-                pass
-            #version_box.delete(0, tkr.END)
-            logbox.insert(END, "\nVersion not found!\n\n")
-            return
+            creation_time_new = None
         try:
             creation_time_old = os.path.getmtime(f"{saveloc}/{environment_wert}/{assets}/{assets}.history.json")
         except:
             creation_time_old = creation_time_new
-        if creation_time_old < creation_time_new:
-            os.remove(f"{saveloc}/{environment_wert}/{assets}/{assets}.history.json")
+        if not creation_time_new is None:
+            if creation_time_old < creation_time_new:
+                os.remove(f"{saveloc}/{environment_wert}/{assets}/{assets}.history.json")
         if True:
             if not os.path.exists(f"{saveloc}/{environment_wert}/{assets}/{assets}.history.json") == True:
                 try:
@@ -6514,11 +6630,11 @@ def search_versions():
                         return
                     else:
                         try:
-                            log1_label.config(text=f"Version not found!")
+                            log1_label.config(text=f"No versions found!")
                         except:
                             pass
                         version_box.delete(0, tkr.END)
-                        logbox.insert(END, "\nVersion not found!\n\n")
+                        logbox.insert(END, "\nNo versions found!\n\n")
                         return
 				
             try:
@@ -6543,9 +6659,9 @@ def search_versions():
                 log1_label.config(text=f"Found previous versions!")
                 return
             except Exception as e:
-                logbox.insert(END, "\nCan't find your version in alias.json. Please ensure you selected an empty folder for download. Please also check whether the desired product exists.\n")
+                logbox.insert(END, "\nNo versions found!\n\n")
                 try:
-                    log1_label.config(text=f"Version not found!")
+                    log1_label.config(text=f"No versions found!")
                 except:
                     pass
                 version_box.delete(0, tkr.END)
@@ -6560,19 +6676,14 @@ def search_versions():
         try:
             creation_time_new = datetime.strptime(requests.get(url).headers["Last-Modified"], "%a, %d %b %Y %H:%M:%S %Z").timestamp()
         except:
-            try:
-                log1_label.config(text=f"Version not found!")
-            except:
-                pass
-            #version_box.delete(0, tkr.END)
-            logbox.insert(END, "\nVersion not found!\n\n")
-            return
+            creation_time_new = None
         try:
             creation_time_old = os.path.getmtime(f"{saveloc}/swtor/{assets}/{assets}.history.json")
         except Exception as e:
             creation_time_old = creation_time_new
-        if creation_time_old < creation_time_new:
-            os.remove(f"{saveloc}/swtor/{assets}/{assets}.history.json")
+        if not creation_time_new is None:
+            if creation_time_old < creation_time_new:
+                os.remove(f"{saveloc}/swtor/{assets}/{assets}.history.json")
         if True:
             if not os.path.exists(f"{saveloc}/swtor/{assets}/{assets}.history.json") == True:
                 try:
@@ -6598,10 +6709,10 @@ def search_versions():
                         return
                     else:
                         try:
-                            log1_label.config(text=f"Version not found!")
+                            log1_label.config(text=f"No versions found!")
                         except:
                             pass
-                        logbox.insert(END, "\nVersion not found!\n\n")
+                        logbox.insert(END, "\nNo versions found!\n\n")
                         return
 				
             try:
@@ -6626,7 +6737,7 @@ def search_versions():
                 log1_label.config(text=f"Found previous versions!")
                 return
             except Exception as e:
-                logbox.insert(END, "\nCan't find your version in alias.json. Please ensure you selected an empty folder for download. Please also check whether the desired product exists.\n")
+                logbox.insert(END, "\nVersion not found!\n\n")
                 try:
                     log1_label.config(text=f"Version not found!")
                 except:
@@ -6674,6 +6785,17 @@ def check_hex():
         except:
             pass
         logbox.insert(END, "\nThis save-path doesn't exist!\n\n")
+        return
+    try:
+        with open(f"{saveloc}/connection.dat", "w") as f:
+            f.close()
+        os.remove(f"{saveloc}/connection.dat")
+    except:
+        try:
+            log1_label.config(text=f"No writing permissions!")
+        except:
+            pass
+        logbox.insert(END, "\nYou are not permitted to write in this save-path!\n\n")
         return
     if allow_custom_hex_var.get() == 1:
         catalog_metafile_hex = hex_zeile.get()
@@ -6778,7 +6900,7 @@ def check_hex():
                     alias_content = jwt.decode(alias_c, algorithms=["RS256"], options={"verify_signature": False})
                     catalog_metafile_hex = alias_content[f"{assets}_{language_wert}.{environment_wert}"]
                 except:
-                    logbox.insert(END, "\nCan't find your version in alias.json. Please ensure you selected an empty folder for download. Please also check whether the desired product exists.\n")
+                    logbox.insert(END, "\nVersion not found!\n\n")
                     try:
                         log1_label.config(text=f"Version not found!")
                     except:
@@ -6825,7 +6947,7 @@ def check_hex():
                     alias_content = jwt.decode(alias_c, algorithms=["RS256"], options={"verify_signature": False})
                     catalog_metafile_hex = alias_content[f"{assets}.{environment_wert}"]
                 except:
-                    logbox.insert(END, "\nCan't find your version in alias.json. Please ensure you selected an empty folder for download. Please also check whether the desired product exists.\n")
+                    logbox.insert(END, "\nVersion not found!\n\n")
                     try:
                         log1_label.config(text=f"Version not found!")
                     except:
@@ -6872,7 +6994,7 @@ def check_hex():
                     alias_content = jwt.decode(alias_c, algorithms=["RS256"], options={"verify_signature": False})
                     catalog_metafile_hex = alias_content[f"{assets}.{environment_wert}"]
                 except:
-                    logbox.insert(END, "\nCan't find your version in alias.json. Please ensure you selected an empty folder for download. Please also check whether the desired product exists.\n")
+                    logbox.insert(END, "\nVersion not found!\n\n")
                     try:
                         log1_label.config(text=f"Version not found!")
                     except:
@@ -6922,6 +7044,17 @@ def check_size():
         except:
             pass
         logbox.insert(END, "\nThis save-path doesn't exist!\n\n")
+        return
+    try:
+        with open(f"{saveloc}/connection.dat", "w") as f:
+            f.close()
+        os.remove(f"{saveloc}/connection.dat")
+    except:
+        try:
+            log1_label.config(text=f"No writing permissions!")
+        except:
+            pass
+        logbox.insert(END, "\nYou are not permitted to write in this save-path!\n\n")
         return
     if allow_custom_hex_var.get() == 1:
         catalog_metafile_hex = hex_zeile.get()
@@ -7028,7 +7161,7 @@ def check_size():
                         alias_content = jwt.decode(alias_c, algorithms=["RS256"], options={"verify_signature": False})
                         catalog_metafile_hex = alias_content[f"{assets}_{language_wert}.{environment_wert}"]
                     except:
-                        logbox.insert(END, "\nCan't find your version in alias.json. Please ensure you selected an empty folder for download. Please also check whether the desired product exists.\n")
+                        logbox.insert(END, "\nVersion not found!\n\n")
                         try:
                             log1_label.config(text=f"Version not found!")
                         except:
@@ -7121,7 +7254,7 @@ def check_size():
                         alias_content = jwt.decode(alias_c, algorithms=["RS256"], options={"verify_signature": False})
                         catalog_metafile_hex = alias_content[f"{assets}.{environment_wert}"]
                     except:
-                        logbox.insert(END, "\nCan't find your version in alias.json. Please ensure you selected an empty folder for download. Please also check whether the desired product exists.\n")
+                        logbox.insert(END, "\nVersion not found!\n\n")
                         try:
                             log1_label.config(text=f"Version not found!")
                         except:
@@ -7216,7 +7349,7 @@ def check_size():
                         alias_content = jwt.decode(alias_c, algorithms=["RS256"], options={"verify_signature": False})
                         catalog_metafile_hex = alias_content[f"{assets}.{environment_wert}"]
                     except:
-                        logbox.insert(END, "\nCan't find your version in alias.json. Please ensure you selected an empty folder for download. Please also check whether the desired product exists.\n")
+                        logbox.insert(END, "\nVersion not found!\n\n")
                         try:
                             log1_label.config(text=f"Version not found!")
                         except:
@@ -7574,12 +7707,12 @@ A2 = "publictest"
 #A5 = "cstraining"
 #A6 = "liveeptest"
 A4 = "launcher"
-A5 = "test_001"
-A6 = "test_PROD"
-A7 = "test_release_tracker"
+#A5 = "test_001"
+#A6 = "test_PROD"
+#A7 = "test_release_tracker"
 varA = tkr.StringVar()
 varA.set(ptsorlive)
-set1 = tkr.OptionMenu(fenster,varA,A1,A2,A4,A5,A6,A7)
+set1 = tkr.OptionMenu(fenster,varA,A1,A2,A4)
 set1.configure(font=("Arial",25))
 
 
