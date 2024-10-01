@@ -7707,12 +7707,12 @@ A2 = "publictest"
 #A5 = "cstraining"
 #A6 = "liveeptest"
 A4 = "launcher"
-#A5 = "test_001"
-#A6 = "test_PROD"
+A5 = "test_001"
+A6 = "test_PROD"
 #A7 = "test_release_tracker"
 varA = tkr.StringVar()
 varA.set(ptsorlive)
-set1 = tkr.OptionMenu(fenster,varA,A1,A2,A4)
+set1 = tkr.OptionMenu(fenster,varA,A1,A2,A4,A5,A6)
 set1.configure(font=("Arial",25))
 
 
