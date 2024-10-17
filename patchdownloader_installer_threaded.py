@@ -2971,17 +2971,19 @@ def install_launcher(saveloc, language_wert, vnummerx, environment_wert, vnummer
         installloc = installzeile.get()
     logbox.insert(END, "\nStarting installation\n\n")#Press CTRL+C to stop.\n\n")
     log1_label.config(text=f"Installing...")
+    if not environment_wert == "swtor-mac":
+        environment_wert = "swtor"
     if catalog_metafile_hex == None:
         try:
             if savetype == "cdn":
-                alias = open(f"{saveloc}/swtor/{assets}/alias.json", "r")
+                alias = open(f"{saveloc}/{environment_wert}/{assets}/alias.json", "r")
             elif savetype == "backup":
-                alias = open(f"{saveloc}/swtor/{assets}/alias.json", "r")
+                alias = open(f"{saveloc}/{environment_wert}/{assets}/alias.json", "r")
             elif savetype == "root":
                 alias = open(f"{saveloc}/alias.json", "r")
             alias_c = alias.read()
             alias_content = jwt.decode(alias_c, algorithms=["RS256"], options={"verify_signature": False})
-            catalog_metafile_hex = alias_content[f"{assets}.{environment_wert}"]
+            catalog_metafile_hex = alias_content[f"{assets}.swtor"]
         except:
             logbox.insert(END, "\nVersion not found!\n\n")
             try:
@@ -3003,7 +3005,7 @@ def install_launcher(saveloc, language_wert, vnummerx, environment_wert, vnummer
     
     if savetype == "cdn":
         try:
-            metafile = open(f"{saveloc}/swtor/{assets}/metafile/{catalog_metafile_hex}/metafile.json", "r")
+            metafile = open(f"{saveloc}/{environment_wert}/{assets}/metafile/{catalog_metafile_hex}/metafile.json", "r")
         except:
             logbox.insert(END, "\nVersion not found!\n\n")
             try:
@@ -3012,11 +3014,11 @@ def install_launcher(saveloc, language_wert, vnummerx, environment_wert, vnummer
                 pass
             return
         if assets == "launcher":
-            shutil.copyfile(f"{saveloc}/swtor/{assets}/metafile/{catalog_metafile_hex}/metafile.json", f"{installloc}/{assets}.{environment_wert}.metafile.json")
-            set_file_last_modified(f"{installloc}/{assets}.{environment_wert}.metafile.json", os.path.getmtime(f"{saveloc}/swtor/{assets}/metafile/{catalog_metafile_hex}/metafile.json"))
+            shutil.copyfile(f"{saveloc}/{environment_wert}/{assets}/metafile/{catalog_metafile_hex}/metafile.json", f"{installloc}/{assets}.{environment_wert}.metafile.json")
+            set_file_last_modified(f"{installloc}/{assets}.{environment_wert}.metafile.json", os.path.getmtime(f"{saveloc}/{environment_wert}/{assets}/metafile/{catalog_metafile_hex}/metafile.json"))
     elif savetype == "backup":
         try:
-            metafile = open(f"{saveloc}/swtor/{assets}/metafile/{catalog_metafile_hex}/metafile.json", "r")
+            metafile = open(f"{saveloc}/{environment_wert}/{assets}/metafile/{catalog_metafile_hex}/metafile.json", "r")
         except:
             logbox.insert(END, "\nVersion not found!\n\n")
             try:
@@ -3025,8 +3027,8 @@ def install_launcher(saveloc, language_wert, vnummerx, environment_wert, vnummer
                 pass
             return
         if assets == "launcher":
-            shutil.copyfile(f"{saveloc}/swtor/{assets}/metafile/{catalog_metafile_hex}/metafile.json", f"{installloc}/{assets}.{environment_wert}.metafile.json")
-            set_file_last_modified(f"{installloc}/{assets}.{environment_wert}.metafile.json", os.path.getmtime(f"{saveloc}/swtor/{assets}/metafile/{catalog_metafile_hex}/metafile.json"))
+            shutil.copyfile(f"{saveloc}/{environment_wert}/{assets}/metafile/{catalog_metafile_hex}/metafile.json", f"{installloc}/{assets}.{environment_wert}.metafile.json")
+            set_file_last_modified(f"{installloc}/{assets}.{environment_wert}.metafile.json", os.path.getmtime(f"{saveloc}/{environment_wert}/{assets}/metafile/{catalog_metafile_hex}/metafile.json"))
     elif savetype == "root":
         try:
             metafile = open(f"{saveloc}/metafile.json", "r")
@@ -3074,7 +3076,7 @@ def install_launcher(saveloc, language_wert, vnummerx, environment_wert, vnummer
         try:
             for meta_file in metafile_content['pieces']['digests']:
                 digest = base64.b64decode(meta_file).hex()
-                solidpiece = open(f"{saveloc}/swtor/{assets}/pieces/{digest[:2]}/{digest}.solidpiece", 'rb')
+                solidpiece = open(f"{saveloc}/{environment_wert}/{assets}/pieces/{digest[:2]}/{digest}.solidpiece", 'rb')
                 header = solidpiece.read(6)
                 compression = header[5]
                 if (compression == 2): # gzip
@@ -3149,7 +3151,7 @@ def install_launcher(saveloc, language_wert, vnummerx, environment_wert, vnummer
                 pass
             return
         except Exception as e:
-            logbox.insert(END, f"ERROR: Can't find {saveloc}/swtor/{assets}/pieces/{digest[:2]}/{digest}.solidpiece\n")
+            logbox.insert(END, f"ERROR: Can't find {saveloc}/{environment_wert}/{assets}/pieces/{digest[:2]}/{digest}.solidpiece\n")
             try:
                 log1_label.config(text=f"ERROR: Missing files")
             except:
@@ -4171,12 +4173,12 @@ def download_launcher_thr(saveloc, language_wert, vnummerx, environment_wert, vn
     for meta_file in metafiles:
         if True:
             if savetype == "cdn":
-                if not os.path.exists(f"{saveloc}/swtor/{assets}/pieces/{meta_file[:2]}/{meta_file}.solidpiece") == True:
+                if not os.path.exists(f"{saveloc}/{environment_wert}/{assets}/pieces/{meta_file[:2]}/{meta_file}.solidpiece") == True:
                     try:
-                        os.makedirs(f"{saveloc}/swtor/{assets}/pieces/{meta_file[:2]}/")
+                        os.makedirs(f"{saveloc}/{environment_wert}/{assets}/pieces/{meta_file[:2]}/")
                     except:
                         pass
-                    url = f"http://cdn-d6patch.swtor.com/swtor/{assets}/pieces/{meta_file[:2]}/{meta_file}.solidpiece"
+                    url = f"http://cdn-d6patch.swtor.com/{environment_wert}/{assets}/pieces/{meta_file[:2]}/{meta_file}.solidpiece"
                     lost = False
                     while True:
                         try:
@@ -4184,30 +4186,30 @@ def download_launcher_thr(saveloc, language_wert, vnummerx, environment_wert, vn
                                 dl_file1.config(text=f"Downloading:\n{url}")
                                 zeitx1 = int(time.time())
                                 sekunden1 = 0
-                                wget.download(url, f"{saveloc}/swtor/{assets}/pieces/{meta_file[:2]}/", bar=bar1_progress)
+                                wget.download(url, f"{saveloc}/{environment_wert}/{assets}/pieces/{meta_file[:2]}/", bar=bar1_progress)
                             if tn == 2:
                                 dl_file2.config(text=f"Downloading:\n{url}")
                                 zeitx2 = int(time.time())
                                 sekunden2 = 0
-                                wget.download(url, f"{saveloc}/swtor/{assets}/pieces/{meta_file[:2]}/", bar=bar2_progress)
+                                wget.download(url, f"{saveloc}/{environment_wert}/{assets}/pieces/{meta_file[:2]}/", bar=bar2_progress)
                             if tn == 3:
                                 dl_file3.config(text=f"Downloading:\n{url}")
                                 zeitx3 = int(time.time())
                                 sekunden3 = 0
-                                wget.download(url, f"{saveloc}/swtor/{assets}/pieces/{meta_file[:2]}/", bar=bar3_progress)
+                                wget.download(url, f"{saveloc}/{environment_wert}/{assets}/pieces/{meta_file[:2]}/", bar=bar3_progress)
                             if tn == 4:
                                 dl_file4.config(text=f"Downloading:\n{url}")
                                 zeitx4 = int(time.time())
                                 sekunden4 = 0
-                                wget.download(url, f"{saveloc}/swtor/{assets}/pieces/{meta_file[:2]}/", bar=bar4_progress)
+                                wget.download(url, f"{saveloc}/{environment_wert}/{assets}/pieces/{meta_file[:2]}/", bar=bar4_progress)
                             if tn == 5:
                                 dl_file5.config(text=f"Downloading:\n{url}")
                                 zeitx5 = int(time.time())
                                 sekunden5 = 0
-                                wget.download(url, f"{saveloc}/swtor/{assets}/pieces/{meta_file[:2]}/", bar=bar5_progress)
+                                wget.download(url, f"{saveloc}/{environment_wert}/{assets}/pieces/{meta_file[:2]}/", bar=bar5_progress)
                             creation_time = datetime.strptime(requests.get(url).headers["Last-Modified"], "%a, %d %b %Y %H:%M:%S %Z").timestamp()
-                            set_file_last_modified(f"{saveloc}/swtor/{assets}/pieces/{meta_file[:2]}/{meta_file}.solidpiece", creation_time)
-                            logbox.insert(END, f"\nDownloaded: http://cdn-d6patch.swtor.com/swtor/{assets}/pieces/{meta_file[:2]}/{meta_file}.solidpiece\n")
+                            set_file_last_modified(f"{saveloc}/{environment_wert}/{assets}/pieces/{meta_file[:2]}/{meta_file}.solidpiece", creation_time)
+                            logbox.insert(END, f"\nDownloaded: http://cdn-d6patch.swtor.com/{environment_wert}/{assets}/pieces/{meta_file[:2]}/{meta_file}.solidpiece\n")
                             log1_label.config(text=f"Downloading...")
                             break
                         except KeyboardInterrupt:
@@ -4239,7 +4241,7 @@ def download_launcher_thr(saveloc, language_wert, vnummerx, environment_wert, vn
                         os.makedirs(saveloc)
                     except:
                         pass
-                    url = f"http://cdn-d6patch.swtor.com/swtor/{assets}/pieces/{meta_file[:2]}/{meta_file}.solidpiece"
+                    url = f"http://cdn-d6patch.swtor.com/{environment_wert}/{assets}/pieces/{meta_file[:2]}/{meta_file}.solidpiece"
                     lost = False
                     while True:
                         try:
@@ -4270,7 +4272,7 @@ def download_launcher_thr(saveloc, language_wert, vnummerx, environment_wert, vn
                                 wget.download(url, saveloc, bar=bar5_progress)
                             creation_time = datetime.strptime(requests.get(url).headers["Last-Modified"], "%a, %d %b %Y %H:%M:%S %Z").timestamp()
                             set_file_last_modified(f"{saveloc}/{meta_file}.solidpiece", creation_time)
-                            logbox.insert(END, f"\nDownloaded: http://cdn-d6patch.swtor.com/swtor/{assets}/pieces/{meta_file[:2]}/{meta_file}.solidpiece\n")
+                            logbox.insert(END, f"\nDownloaded: http://cdn-d6patch.swtor.com/{environment_wert}/{assets}/pieces/{meta_file[:2]}/{meta_file}.solidpiece\n")
                             log1_label.config(text=f"Downloading...")
                             break
                         except KeyboardInterrupt:
@@ -4302,7 +4304,7 @@ def download_launcher_thr(saveloc, language_wert, vnummerx, environment_wert, vn
                         os.makedirs(saveloc)
                     except:
                         pass
-                    url = f"http://cdn-d6patch.swtor.com/swtor/{assets}/pieces/{meta_file[:2]}/{meta_file}.solidpiece"
+                    url = f"http://cdn-d6patch.swtor.com/{environment_wert}/{assets}/pieces/{meta_file[:2]}/{meta_file}.solidpiece"
                     lost = False
                     while True:
                         try:
@@ -4333,7 +4335,7 @@ def download_launcher_thr(saveloc, language_wert, vnummerx, environment_wert, vn
                                 wget.download(url, saveloc, bar=bar5_progress)
                             creation_time = datetime.strptime(requests.get(url).headers["Last-Modified"], "%a, %d %b %Y %H:%M:%S %Z").timestamp()
                             set_file_last_modified(f"{saveloc}/{meta_file}.solidpiece", creation_time)
-                            logbox.insert(END, f"\nDownloaded: http://cdn-d6patch.swtor.com/swtor/{assets}/pieces/{meta_file[:2]}/{meta_file}.solidpiece\n")
+                            logbox.insert(END, f"\nDownloaded: http://cdn-d6patch.swtor.com/{environment_wert}/{assets}/pieces/{meta_file[:2]}/{meta_file}.solidpiece\n")
                             log1_label.config(text=f"Downloading...")
                             break
                         except KeyboardInterrupt:
@@ -4383,36 +4385,38 @@ def download_launcher(saveloc, language_wert, vnummerx, environment_wert, vnumme
     except:
         selected = ""
     if True:
+        if not environment_wert == "swtor-mac":
+            environment_wert = "swtor"
         if catalog_metafile_hex is None:
             if savetype == "cdn":
                 logbox.insert(END, f"Download of {assets} {environment_wert} {selected} alias.json started!\n\n")#Press CTRL+C to stop.\n")
-                url = f"http://cdn-d6patch.swtor.com/swtor/{assets}/alias.json"
+                url = f"http://cdn-d6patch.swtor.com/{environment_wert}/{assets}/alias.json"
                 try:
-                    os.makedirs(f"{saveloc}/swtor/{assets}/")
+                    os.makedirs(f"{saveloc}/{environment_wert}/{assets}/")
                 except:
                     pass
                 if allow_newversion_check_f == 1 or allow_newversion_check_f == "true":
                     md5_new = hashlib.md5(requests.get(url).content.decode("utf-8").encode('utf-8')).hexdigest()
                     try:
-                        md5_old = hashlib.md5(open(f"{saveloc}/swtor/{assets}/alias.json").read().encode('utf-8')).hexdigest()
+                        md5_old = hashlib.md5(open(f"{saveloc}/{environment_wert}/{assets}/alias.json").read().encode('utf-8')).hexdigest()
                     except:
                         md5_old = md5_new
                     if not md5_old == md5_new:
                          for i in range(1, 99999):
-                            if not os.path.isfile(f"{saveloc}/swtor/{assets}/alias_old_{i}.json"):
-                                os.rename(f"{saveloc}/swtor/{assets}/alias.json", f"{saveloc}/swtor/{assets}/alias_old_{i}.json")
+                            if not os.path.isfile(f"{saveloc}/{environment_wert}/{assets}/alias_old_{i}.json"):
+                                os.rename(f"{saveloc}/{environment_wert}/{assets}/alias.json", f"{saveloc}/{environment_wert}/{assets}/alias_old_{i}.json")
                                 break
-                if not os.path.exists(f"{saveloc}/swtor/{assets}/alias.json") == True:
+                if not os.path.exists(f"{saveloc}/{environment_wert}/{assets}/alias.json") == True:
                     lost = False
                     while True:
                         try:
                             zeitx1 = int(time.time())
                             sekunden1 = 0
                             dl_file1.config(text=f"Downloading:\n{url}")
-                            wget.download(url, f"{saveloc}/swtor/{assets}/", bar=bar1_progress)
+                            wget.download(url, f"{saveloc}/{environment_wert}/{assets}/", bar=bar1_progress)
                             creation_time = datetime.strptime(requests.get(url).headers["Last-Modified"], "%a, %d %b %Y %H:%M:%S %Z").timestamp()
-                            set_file_last_modified(f"{saveloc}/swtor/{assets}/alias.json", creation_time)
-                            logbox.insert(END, f"\nDownloaded: http://cdn-d6patch.swtor.com/swtor/{assets}/alias.json\n\n")
+                            set_file_last_modified(f"{saveloc}/{environment_wert}/{assets}/alias.json", creation_time)
+                            logbox.insert(END, f"\nDownloaded: http://cdn-d6patch.swtor.com/{environment_wert}/{assets}/alias.json\n\n")
                             log1_label.config(text=f"Downloading...")
                             break
                         except KeyboardInterrupt:
@@ -4439,33 +4443,34 @@ def download_launcher(saveloc, language_wert, vnummerx, environment_wert, vnumme
 
             elif savetype == "backup":
                 logbox.insert(END, f"Download of {assets} {environment_wert} {selected} alias.json started!\n\n")#Press CTRL+C to stop.\n")
-                url = f"http://cdn-d6patch.swtor.com/swtor/{assets}/alias.json"
+                url = f"http://cdn-d6patch.swtor.com/{environment_wert}/{assets}/alias.json"
+                print(url)
                 try:
-                    os.makedirs(f"{saveloc}/swtor/{assets}/")
+                    os.makedirs(f"{saveloc}/{environment_wert}/{assets}/")
                 except:
                     pass
                 if allow_newversion_check_f == 1 or allow_newversion_check_f == "true":
                     md5_new = hashlib.md5(requests.get(url).content.decode("utf-8").encode('utf-8')).hexdigest()
                     try:
-                        md5_old = hashlib.md5(open(f"{saveloc}/swtor/{assets}/alias.json").read().encode('utf-8')).hexdigest()
+                        md5_old = hashlib.md5(open(f"{saveloc}/{environment_wert}/{assets}/alias.json").read().encode('utf-8')).hexdigest()
                     except:
                         md5_old = md5_new
                     if not md5_old == md5_new:
                          for i in range(1, 99999):
-                            if not os.path.isfile(f"{saveloc}/swtor/{assets}/alias_old_{i}.json"):
-                                os.rename(f"{saveloc}/swtor/{assets}/alias.json", f"{saveloc}/swtor/{assets}/alias_old_{i}.json")
+                            if not os.path.isfile(f"{saveloc}/{environment_wert}/{assets}/alias_old_{i}.json"):
+                                os.rename(f"{saveloc}/{environment_wert}/{assets}/alias.json", f"{saveloc}/{environment_wert}/{assets}/alias_old_{i}.json")
                                 break
-                if not os.path.exists(f"{saveloc}/swtor/{assets}/alias.json") == True:
+                if not os.path.exists(f"{saveloc}/{environment_wert}/{assets}/alias.json") == True:
                     lost = False
                     while True:
                         try:
                             zeitx1 = int(time.time())
                             sekunden1 = 0
                             dl_file1.config(text=f"Downloading:\n{url}")
-                            wget.download(url, f"{saveloc}/swtor/{assets}/", bar=bar1_progress)
+                            wget.download(url, f"{saveloc}/{environment_wert}/{assets}/", bar=bar1_progress)
                             creation_time = datetime.strptime(requests.get(url).headers["Last-Modified"], "%a, %d %b %Y %H:%M:%S %Z").timestamp()
-                            set_file_last_modified(f"{saveloc}/swtor/{assets}/alias.json", creation_time)
-                            logbox.insert(END, f"\nDownloaded: http://cdn-d6patch.swtor.com/swtor/{assets}/alias.json\n\n")
+                            set_file_last_modified(f"{saveloc}/{environment_wert}/{assets}/alias.json", creation_time)
+                            logbox.insert(END, f"\nDownloaded: http://cdn-d6patch.swtor.com/{environment_wert}/{assets}/alias.json\n\n")
                             log1_label.config(text=f"Downloading...")
                             break
                         except KeyboardInterrupt:
@@ -4496,7 +4501,7 @@ def download_launcher(saveloc, language_wert, vnummerx, environment_wert, vnumme
                     os.makedirs(saveloc)
                 except:
                     pass
-                url = f"http://cdn-d6patch.swtor.com/swtor/{assets}/alias.json"
+                url = f"http://cdn-d6patch.swtor.com/{environment_wert}/{assets}/alias.json"
                 if allow_newversion_check_f == 1 or allow_newversion_check_f == "true":
                     md5_new = hashlib.md5(requests.get(url).content.decode("utf-8").encode('utf-8')).hexdigest()
                     try:
@@ -4518,7 +4523,7 @@ def download_launcher(saveloc, language_wert, vnummerx, environment_wert, vnumme
                             wget.download(url, saveloc, bar=bar1_progress)
                             creation_time = datetime.strptime(requests.get(url).headers["Last-Modified"], "%a, %d %b %Y %H:%M:%S %Z").timestamp()
                             set_file_last_modified(f"{saveloc}/alias.json", creation_time)
-                            logbox.insert(END, f"\nDownloaded: http://cdn-d6patch.swtor.com/swtor/{assets}/alias.json\n\n")
+                            logbox.insert(END, f"\nDownloaded: http://cdn-d6patch.swtor.com/{environment_wert}/{assets}/alias.json\n\n")
                             log1_label.config(text=f"Downloading...")
                             break
                         except KeyboardInterrupt:
@@ -4545,14 +4550,14 @@ def download_launcher(saveloc, language_wert, vnummerx, environment_wert, vnumme
 
             try:
                 if savetype == "cdn":
-                    alias = open(f"{saveloc}/swtor/{assets}/alias.json", "r")
+                    alias = open(f"{saveloc}/{environment_wert}/{assets}/alias.json", "r")
                 elif savetype == "backup":
-                    alias = open(f"{saveloc}/swtor/{assets}/alias.json", "r")
+                    alias = open(f"{saveloc}/{environment_wert}/{assets}/alias.json", "r")
                 elif savetype == "root":
                     alias = open(f"{saveloc}/alias.json", "r")
                 alias_c = alias.read()
                 alias_content = jwt.decode(alias_c, algorithms=["RS256"], options={"verify_signature": False})
-                catalog_metafile_hex = alias_content[f"{assets}.{environment_wert}"]
+                catalog_metafile_hex = alias_content[f"{assets}.swtor"]
             except:
                 logbox.insert(END, "\nVersion not found!\n\n")
                 try:
@@ -4563,32 +4568,32 @@ def download_launcher(saveloc, language_wert, vnummerx, environment_wert, vnumme
             
         if savetype == "cdn":
             try:
-                os.makedirs(f"{saveloc}/swtor/{assets}/catalog/{catalog_metafile_hex}/")
+                os.makedirs(f"{saveloc}/{environment_wert}/{assets}/catalog/{catalog_metafile_hex}/")
             except:
                 pass
-            url = f"http://cdn-d6patch.swtor.com/swtor/{assets}/catalog/{catalog_metafile_hex}/catalog.json"
+            url = f"http://cdn-d6patch.swtor.com/{environment_wert}/{assets}/catalog/{catalog_metafile_hex}/catalog.json"
             md5_new = hashlib.md5(requests.get(url).content.decode("utf-8").encode('utf-8')).hexdigest()
             try:
-                md5_old = hashlib.md5(open(f"{saveloc}/swtor/{assets}/catalog/{catalog_metafile_hex}/catalog.json").read().encode('utf-8')).hexdigest()
+                md5_old = hashlib.md5(open(f"{saveloc}/{environment_wert}/{assets}/catalog/{catalog_metafile_hex}/catalog.json").read().encode('utf-8')).hexdigest()
             except:
                 md5_old = md5_new
             if not md5_old == md5_new:
                 for i in range(1, 99999):
-                    if not os.path.isfile(f"{saveloc}/swtor/{assets}/catalog/{catalog_metafile_hex}/catalog_old_{i}.json"):
-                        os.rename(f"{saveloc}/swtor/{assets}/catalog/{catalog_metafile_hex}/catalog.json", f"{saveloc}/swtor/{assets}/catalog/{catalog_metafile_hex}/catalog_old_{i}.json")
+                    if not os.path.isfile(f"{saveloc}/{environment_wert}/{assets}/catalog/{catalog_metafile_hex}/catalog_old_{i}.json"):
+                        os.rename(f"{saveloc}/{environment_wert}/{assets}/catalog/{catalog_metafile_hex}/catalog.json", f"{saveloc}/{environment_wert}/{assets}/catalog/{catalog_metafile_hex}/catalog_old_{i}.json")
                         break
             logbox.insert(END, f"Download of {assets} {environment_wert} {selected} catalog.json started!\n\n")#Press CTRL+C to stop.\n")
-            if not os.path.exists(f"{saveloc}/swtor/{assets}/catalog/{catalog_metafile_hex}/catalog.json") == True:
+            if not os.path.exists(f"{saveloc}/{environment_wert}/{assets}/catalog/{catalog_metafile_hex}/catalog.json") == True:
                 lost = False
                 while True:
                     try:
                         zeitx2 = int(time.time())
                         sekunden2 = 0
                         dl_file2.config(text=f"Downloading:\n{url}")
-                        wget.download(url, f"{saveloc}/swtor/{assets}/catalog/{catalog_metafile_hex}/", bar=bar2_progress)
+                        wget.download(url, f"{saveloc}/{environment_wert}/{assets}/catalog/{catalog_metafile_hex}/", bar=bar2_progress)
                         creation_time = datetime.strptime(requests.get(url).headers["Last-Modified"], "%a, %d %b %Y %H:%M:%S %Z").timestamp()
-                        set_file_last_modified(f"{saveloc}/swtor/{assets}/catalog/{catalog_metafile_hex}/catalog.json", creation_time)
-                        logbox.insert(END, f"\nDownloaded: http://cdn-d6patch.swtor.com/swtor/{assets}/catalog/{catalog_metafile_hex}/catalog.json\n\n")
+                        set_file_last_modified(f"{saveloc}/{environment_wert}/{assets}/catalog/{catalog_metafile_hex}/catalog.json", creation_time)
+                        logbox.insert(END, f"\nDownloaded: http://cdn-d6patch.swtor.com/{environment_wert}/{assets}/catalog/{catalog_metafile_hex}/catalog.json\n\n")
                         log1_label.config(text=f"Downloading...")
                         break
                     except KeyboardInterrupt:
@@ -4614,32 +4619,32 @@ def download_launcher(saveloc, language_wert, vnummerx, environment_wert, vnumme
                             return
 
             try:
-                os.makedirs(f"{saveloc}/swtor/{assets}/metafile/{catalog_metafile_hex}/")
+                os.makedirs(f"{saveloc}/{environment_wert}/{assets}/metafile/{catalog_metafile_hex}/")
             except:
                 pass
-            url = f"http://cdn-d6patch.swtor.com/swtor/{assets}/metafile/{catalog_metafile_hex}/metafile.json"
+            url = f"http://cdn-d6patch.swtor.com/{environment_wert}/{assets}/metafile/{catalog_metafile_hex}/metafile.json"
             md5_new = hashlib.md5(requests.get(url).content.decode("utf-8").encode('utf-8')).hexdigest()
             try:
-                md5_old = hashlib.md5(open(f"{saveloc}/swtor/{assets}/metafile/{catalog_metafile_hex}/metafile.json").read().encode('utf-8')).hexdigest()
+                md5_old = hashlib.md5(open(f"{saveloc}/{environment_wert}/{assets}/metafile/{catalog_metafile_hex}/metafile.json").read().encode('utf-8')).hexdigest()
             except:
                 md5_old = md5_new
             if not md5_old == md5_new:
                 for i in range(1, 99999):
-                    if not os.path.isfile(f"{saveloc}/swtor/{assets}/metafile/{catalog_metafile_hex}/metafile_old_{i}.json"):
-                        os.rename(f"{saveloc}/swtor/{assets}/metafile/{catalog_metafile_hex}/metafile.json", f"{saveloc}/swtor/{assets}/metafile/{catalog_metafile_hex}/metafile_old_{i}.json")
+                    if not os.path.isfile(f"{saveloc}/{environment_wert}/{assets}/metafile/{catalog_metafile_hex}/metafile_old_{i}.json"):
+                        os.rename(f"{saveloc}/{environment_wert}/{assets}/metafile/{catalog_metafile_hex}/metafile.json", f"{saveloc}/{environment_wert}/{assets}/metafile/{catalog_metafile_hex}/metafile_old_{i}.json")
                         break
             logbox.insert(END, f"Download of {assets} {environment_wert} {selected} metafile.json started!\n\n")#Press CTRL+C to stop.\n")
-            if not os.path.exists(f"{saveloc}/swtor/{assets}/metafile/{catalog_metafile_hex}/metafile.json") == True:
+            if not os.path.exists(f"{saveloc}/{environment_wert}/{assets}/metafile/{catalog_metafile_hex}/metafile.json") == True:
                 lost = False
                 while True:
                     try:
                         zeitx3 = int(time.time())
                         sekunden3 = 0
                         dl_file3.config(text=f"Downloading:\n{url}")
-                        wget.download(url, f"{saveloc}/swtor/{assets}/metafile/{catalog_metafile_hex}/", bar=bar3_progress)
+                        wget.download(url, f"{saveloc}/{environment_wert}/{assets}/metafile/{catalog_metafile_hex}/", bar=bar3_progress)
                         creation_time = datetime.strptime(requests.get(url).headers["Last-Modified"], "%a, %d %b %Y %H:%M:%S %Z").timestamp()
-                        set_file_last_modified(f"{saveloc}/swtor/{assets}/metafile/{catalog_metafile_hex}/metafile.json", creation_time)
-                        logbox.insert(END, f"\nDownloaded: http://cdn-d6patch.swtor.com/swtor/{assets}/metafile/{catalog_metafile_hex}/metafile.json\n\n")
+                        set_file_last_modified(f"{saveloc}/{environment_wert}/{assets}/metafile/{catalog_metafile_hex}/metafile.json", creation_time)
+                        logbox.insert(END, f"\nDownloaded: http://cdn-d6patch.swtor.com/{environment_wert}/{assets}/metafile/{catalog_metafile_hex}/metafile.json\n\n")
                         log1_label.config(text=f"Downloading...")
                         break
                     except KeyboardInterrupt:
@@ -4666,32 +4671,32 @@ def download_launcher(saveloc, language_wert, vnummerx, environment_wert, vnumme
             
         elif savetype == "backup":
             try:
-                os.makedirs(f"{saveloc}/swtor/{assets}/catalog/{catalog_metafile_hex}/")
+                os.makedirs(f"{saveloc}/{environment_wert}/{assets}/catalog/{catalog_metafile_hex}/")
             except:
                 pass
-            url = f"http://cdn-d6patch.swtor.com/swtor/{assets}/catalog/{catalog_metafile_hex}/catalog.json"
+            url = f"http://cdn-d6patch.swtor.com/{environment_wert}/{assets}/catalog/{catalog_metafile_hex}/catalog.json"
             md5_new = hashlib.md5(requests.get(url).content.decode("utf-8").encode('utf-8')).hexdigest()
             try:
-                md5_old = hashlib.md5(open(f"{saveloc}/swtor/{assets}/catalog/{catalog_metafile_hex}/catalog.json").read().encode('utf-8')).hexdigest()
+                md5_old = hashlib.md5(open(f"{saveloc}/{environment_wert}/{assets}/catalog/{catalog_metafile_hex}/catalog.json").read().encode('utf-8')).hexdigest()
             except:
                 md5_old = md5_new
             if not md5_old == md5_new:
                 for i in range(1, 99999):
-                    if not os.path.isfile(f"{saveloc}/swtor/{assets}/catalog/{catalog_metafile_hex}/catalog_old_{i}.json"):
-                        os.rename(f"{saveloc}/swtor/{assets}/catalog/{catalog_metafile_hex}/catalog.json", f"{saveloc}/swtor/{assets}/catalog/{catalog_metafile_hex}/catalog_old_{i}.json")
+                    if not os.path.isfile(f"{saveloc}/{environment_wert}/{assets}/catalog/{catalog_metafile_hex}/catalog_old_{i}.json"):
+                        os.rename(f"{saveloc}/{environment_wert}/{assets}/catalog/{catalog_metafile_hex}/catalog.json", f"{saveloc}/{environment_wert}/{assets}/catalog/{catalog_metafile_hex}/catalog_old_{i}.json")
                         break
             logbox.insert(END, f"Download of {assets} {environment_wert} {selected} catalog.json started!\n\n")#Press CTRL+C to stop.\n")
-            if not os.path.exists(f"{saveloc}/swtor/{assets}/catalog/{catalog_metafile_hex}/catalog.json") == True:
+            if not os.path.exists(f"{saveloc}/{environment_wert}/{assets}/catalog/{catalog_metafile_hex}/catalog.json") == True:
                 lost = False
                 while True:
                     try:
                         zeitx2 = int(time.time())
                         sekunden2 = 0
                         dl_file2.config(text=f"Downloading:\n{url}")
-                        wget.download(url, f"{saveloc}/swtor/{assets}/catalog/{catalog_metafile_hex}/", bar=bar2_progress)
+                        wget.download(url, f"{saveloc}/{environment_wert}/{assets}/catalog/{catalog_metafile_hex}/", bar=bar2_progress)
                         creation_time = datetime.strptime(requests.get(url).headers["Last-Modified"], "%a, %d %b %Y %H:%M:%S %Z").timestamp()
-                        set_file_last_modified(f"{saveloc}/swtor/{assets}/catalog/{catalog_metafile_hex}/catalog.json", creation_time)
-                        logbox.insert(END, f"\nDownloaded: http://cdn-d6patch.swtor.com/swtor/{assets}/catalog/{catalog_metafile_hex}/catalog.json\n\n")
+                        set_file_last_modified(f"{saveloc}/{environment_wert}/{assets}/catalog/{catalog_metafile_hex}/catalog.json", creation_time)
+                        logbox.insert(END, f"\nDownloaded: http://cdn-d6patch.swtor.com/{environment_wert}/{assets}/catalog/{catalog_metafile_hex}/catalog.json\n\n")
                         log1_label.config(text=f"Downloading...")
                         break
                     except KeyboardInterrupt:
@@ -4717,32 +4722,32 @@ def download_launcher(saveloc, language_wert, vnummerx, environment_wert, vnumme
                             return
 
             try:
-                os.makedirs(f"{saveloc}/swtor/{assets}/metafile/{catalog_metafile_hex}/")
+                os.makedirs(f"{saveloc}/{environment_wert}/{assets}/metafile/{catalog_metafile_hex}/")
             except:
                 pass
-            url = f"http://cdn-d6patch.swtor.com/swtor/{assets}/metafile/{catalog_metafile_hex}/metafile.json"
+            url = f"http://cdn-d6patch.swtor.com/{environment_wert}/{assets}/metafile/{catalog_metafile_hex}/metafile.json"
             md5_new = hashlib.md5(requests.get(url).content.decode("utf-8").encode('utf-8')).hexdigest()
             try:
-                md5_old = hashlib.md5(open(f"{saveloc}/swtor/{assets}/metafile/{catalog_metafile_hex}/metafile.json").read().encode('utf-8')).hexdigest()
+                md5_old = hashlib.md5(open(f"{saveloc}/{environment_wert}/{assets}/metafile/{catalog_metafile_hex}/metafile.json").read().encode('utf-8')).hexdigest()
             except:
                 md5_old = md5_new
             if not md5_old == md5_new:
                 for i in range(1, 99999):
-                    if not os.path.isfile(f"{saveloc}/swtor/{assets}/metafile/{catalog_metafile_hex}/metafile_old_{i}.json"):
-                        os.rename(f"{saveloc}/swtor/{assets}/metafile/{catalog_metafile_hex}/metafile.json", f"{saveloc}/swtor/{assets}/metafile/{catalog_metafile_hex}/metafile_old_{i}.json")
+                    if not os.path.isfile(f"{saveloc}/{environment_wert}/{assets}/metafile/{catalog_metafile_hex}/metafile_old_{i}.json"):
+                        os.rename(f"{saveloc}/{environment_wert}/{assets}/metafile/{catalog_metafile_hex}/metafile.json", f"{saveloc}/{environment_wert}/{assets}/metafile/{catalog_metafile_hex}/metafile_old_{i}.json")
                         break
             logbox.insert(END, f"Download of {assets} {environment_wert} {selected} metafile.json started!\n\n")#Press CTRL+C to stop.\n")
-            if not os.path.exists(f"{saveloc}/swtor/{assets}/metafile/{catalog_metafile_hex}/metafile.json") == True:
+            if not os.path.exists(f"{saveloc}/{environment_wert}/{assets}/metafile/{catalog_metafile_hex}/metafile.json") == True:
                 lost = False
                 while True:
                     try:
                         zeitx3 = int(time.time())
                         sekunden3 = 0
                         dl_file3.config(text=f"Downloading:\n{url}")
-                        wget.download(url, f"{saveloc}/swtor/{assets}/metafile/{catalog_metafile_hex}/", bar=bar3_progress)
+                        wget.download(url, f"{saveloc}/{environment_wert}/{assets}/metafile/{catalog_metafile_hex}/", bar=bar3_progress)
                         creation_time = datetime.strptime(requests.get(url).headers["Last-Modified"], "%a, %d %b %Y %H:%M:%S %Z").timestamp()
-                        set_file_last_modified(f"{saveloc}/swtor/{assets}/metafile/{catalog_metafile_hex}/metafile.json", creation_time)
-                        logbox.insert(END, f"\nDownloaded: http://cdn-d6patch.swtor.com/swtor/{assets}/metafile/{catalog_metafile_hex}/metafile.json\n\n")
+                        set_file_last_modified(f"{saveloc}/{environment_wert}/{assets}/metafile/{catalog_metafile_hex}/metafile.json", creation_time)
+                        logbox.insert(END, f"\nDownloaded: http://cdn-d6patch.swtor.com/{environment_wert}/{assets}/metafile/{catalog_metafile_hex}/metafile.json\n\n")
                         log1_label.config(text=f"Downloading...")
                         break
                     except KeyboardInterrupt:
@@ -4772,7 +4777,7 @@ def download_launcher(saveloc, language_wert, vnummerx, environment_wert, vnumme
                 os.makedirs(saveloc)
             except:
                 pass
-            url = f"http://cdn-d6patch.swtor.com/swtor/{assets}/catalog/{catalog_metafile_hex}/catalog.json"
+            url = f"http://cdn-d6patch.swtor.com/{environment_wert}/{assets}/catalog/{catalog_metafile_hex}/catalog.json"
             md5_new = hashlib.md5(requests.get(url).content.decode("utf-8").encode('utf-8')).hexdigest()
             try:
                 md5_old = hashlib.md5(open(f"{saveloc}/catalog.json").read().encode('utf-8')).hexdigest()
@@ -4794,7 +4799,7 @@ def download_launcher(saveloc, language_wert, vnummerx, environment_wert, vnumme
                         wget.download(url, saveloc, bar=bar2_progress)
                         creation_time = datetime.strptime(requests.get(url).headers["Last-Modified"], "%a, %d %b %Y %H:%M:%S %Z").timestamp()
                         set_file_last_modified(f"{saveloc}/catalog.json", creation_time)
-                        logbox.insert(END, f"\nDownloaded: http://cdn-d6patch.swtor.com/swtor/{assets}/catalog/{catalog_metafile_hex}/catalog.json\n\n")
+                        logbox.insert(END, f"\nDownloaded: http://cdn-d6patch.swtor.com/{environment_wert}/{assets}/catalog/{catalog_metafile_hex}/catalog.json\n\n")
                         log1_label.config(text=f"Downloading...")
                         break
                     except KeyboardInterrupt:
@@ -4823,7 +4828,7 @@ def download_launcher(saveloc, language_wert, vnummerx, environment_wert, vnumme
                 os.makedirs(saveloc)
             except:
                 pass
-            url = f"http://cdn-d6patch.swtor.com/swtor/{assets}/metafile/{catalog_metafile_hex}/metafile.json"
+            url = f"http://cdn-d6patch.swtor.com/{environment_wert}/{assets}/metafile/{catalog_metafile_hex}/metafile.json"
             md5_new = hashlib.md5(requests.get(url).content.decode("utf-8").encode('utf-8')).hexdigest()
             try:
                 md5_old = hashlib.md5(open(f"{saveloc}/metafile.json").read().encode('utf-8')).hexdigest()
@@ -4845,7 +4850,7 @@ def download_launcher(saveloc, language_wert, vnummerx, environment_wert, vnumme
                         wget.download(url, saveloc, bar=bar3_progress)
                         creation_time = datetime.strptime(requests.get(url).headers["Last-Modified"], "%a, %d %b %Y %H:%M:%S %Z").timestamp()
                         set_file_last_modified(f"{saveloc}/metafile.json", creation_time)
-                        logbox.insert(END, f"\nDownloaded: http://cdn-d6patch.swtor.com/swtor/{assets}/metafile/{catalog_metafile_hex}/metafile.json\n\n")
+                        logbox.insert(END, f"\nDownloaded: http://cdn-d6patch.swtor.com/{environment_wert}/{assets}/metafile/{catalog_metafile_hex}/metafile.json\n\n")
                         log1_label.config(text=f"Downloading...")
                         break
                     except KeyboardInterrupt:
@@ -4871,9 +4876,9 @@ def download_launcher(saveloc, language_wert, vnummerx, environment_wert, vnumme
                             return
 
         if savetype == "cdn":
-            metafile = open(f"{saveloc}/swtor/{assets}/metafile/{catalog_metafile_hex}/metafile.json", "r")
+            metafile = open(f"{saveloc}/{environment_wert}/{assets}/metafile/{catalog_metafile_hex}/metafile.json", "r")
         elif savetype == "backup":
-            metafile = open(f"{saveloc}/swtor/{assets}/metafile/{catalog_metafile_hex}/metafile.json", "r")
+            metafile = open(f"{saveloc}/{environment_wert}/{assets}/metafile/{catalog_metafile_hex}/metafile.json", "r")
         elif savetype == "root":
             metafile = open(f"{saveloc}/metafile.json", "r")
         metafile_c = metafile.read()
@@ -6119,18 +6124,20 @@ def check_date():
                     pass
 
             elif assets == "launcher":
+                if not environment_wert == "swtor-mac":
+                    environment_wert = "swtor"
                 if not oldversion:
-                    if not os.path.exists(f"{saveloc}/swtor/{assets}/alias.json") == True:
+                    if not os.path.exists(f"{saveloc}/{environment_wert}/{assets}/alias.json") == True:
                         try:
-                            os.makedirs(f"{saveloc}/swtor/{assets}/")
+                            os.makedirs(f"{saveloc}/{environment_wert}/{assets}/")
                         except:
                             pass
-                        url = f"http://cdn-d6patch.swtor.com/swtor/{assets}/alias.json"
+                        url = f"http://cdn-d6patch.swtor.com/{environment_wert}/{assets}/alias.json"
                         try:
                             zeitx1 = int(time.time())
                             sekunden1 = 0
                             dl_file1.config(text=f"Downloading:\n{url}")
-                            wget.download(url, f"{saveloc}/swtor/{assets}/", bar=bar1_progress)
+                            wget.download(url, f"{saveloc}/{environment_wert}/{assets}/", bar=bar1_progress)
                             logbox.insert(END, f"\nDownloaded: {url}\n\n")
                         except KeyboardInterrupt:
                             logbox.insert(END, "\nYou stopped the download!\n")
@@ -6154,10 +6161,10 @@ def check_date():
                                 return
                                         
                     try:
-                        alias = open(f"{saveloc}/swtor/{assets}/alias.json", "r")
+                        alias = open(f"{saveloc}/{environment_wert}/{assets}/alias.json", "r")
                         alias_c = alias.read()
                         alias_content = jwt.decode(alias_c, algorithms=["RS256"], options={"verify_signature": False})
-                        catalog_metafile_hex = alias_content[f"{assets}.{environment_wert}"]
+                        catalog_metafile_hex = alias_content[f"{assets}.swtor"]
                     except:
                         logbox.insert(END, "\nVersion not found!\n\n")
                         try:
@@ -6167,17 +6174,17 @@ def check_date():
                         return
                                     
                                     
-                if not os.path.exists(f"{saveloc}/swtor/{assets}/metafile/{catalog_metafile_hex}/metafile.json") == True:
+                if not os.path.exists(f"{saveloc}/{environment_wert}/{assets}/metafile/{catalog_metafile_hex}/metafile.json") == True:
                     try:
-                        os.makedirs(f"{saveloc}/swtor/{assets}/metafile/{catalog_metafile_hex}/")
+                        os.makedirs(f"{saveloc}/{environment_wert}/{assets}/metafile/{catalog_metafile_hex}/")
                     except:
                         pass
-                    url = f"http://cdn-d6patch.swtor.com/swtor/{assets}/metafile/{catalog_metafile_hex}/metafile.json"
+                    url = f"http://cdn-d6patch.swtor.com/{environment_wert}/{assets}/metafile/{catalog_metafile_hex}/metafile.json"
                     try:
                         zeitx2 = int(time.time())
                         sekunden2 = 0
                         dl_file2.config(text=f"Downloading:\n{url}")
-                        wget.download(url, f"{saveloc}/swtor/{assets}/metafile/{catalog_metafile_hex}/", bar=bar2_progress)
+                        wget.download(url, f"{saveloc}/{environment_wert}/{assets}/metafile/{catalog_metafile_hex}/", bar=bar2_progress)
                         logbox.insert(END, f"\nDownloaded: {url}\n\n")
                     except KeyboardInterrupt:
                         logbox.insert(END, "\nYou stopped the download!\n")
@@ -6200,7 +6207,7 @@ def check_date():
                             logbox.insert(END, "\nVersion not found!\n\n")
                             return
                                                     
-                metafile = open(f"{saveloc}/swtor/{assets}/metafile/{catalog_metafile_hex}/metafile.json", "r")
+                metafile = open(f"{saveloc}/{environment_wert}/{assets}/metafile/{catalog_metafile_hex}/metafile.json", "r")
                 metafile_c = metafile.read()
                 metafile_content = jwt.decode(metafile_c, algorithms=["RS256"], options={"verify_signature": False})
                 scantime = metafile_content["scanTime"]
@@ -6306,6 +6313,13 @@ def button_action():
         logbox.insert(END, "\nPlease enter an installation-path!\n\n")
         return
     if will_install:
+        if not os.path.exists(installloc) and will_install:
+            try:
+                log1_label.config(text=f"This installation-path doesn't exist!")
+            except:
+                pass
+            logbox.insert(END, "\nThis installation-path doesn't exist!\n\n")
+            return
         try:
             with open(f"{installloc}/connection.dat", "w") as f:
                 f.close()
@@ -6317,13 +6331,6 @@ def button_action():
                 pass
             logbox.insert(END, "\nYou are not permitted to write in this installation-path!\n\n")
             return
-    if not os.path.exists(installloc) and will_install:
-        try:
-            log1_label.config(text=f"This installation-path doesn't exist!")
-        except:
-            pass
-        logbox.insert(END, "\nThis installation-path doesn't exist!\n\n")
-        return
     allow_newversion_check_f = allow_newversion_check_var.get()
     if allow_custom_hex_var.get() == 1:
         catalog_metafile_hex = hex_zeile.get()
@@ -6668,32 +6675,34 @@ def search_versions():
                 return
 
     elif assets == "launcher":
+        if not environment_wert == "swtor-mac":
+            environment_wert = "swtor"
         try:
-            os.makedirs(f"{saveloc}/swtor/{assets}/")
+            os.makedirs(f"{saveloc}/{environment_wert}/{assets}/")
         except:
             pass
-        url = f"http://cdn-d6patch.swtor.com/swtor/{assets}/{assets}.history.json"
+        url = f"http://cdn-d6patch.swtor.com/{environment_wert}/{assets}/{assets}.history.json"
         try:
             creation_time_new = datetime.strptime(requests.get(url).headers["Last-Modified"], "%a, %d %b %Y %H:%M:%S %Z").timestamp()
         except:
             creation_time_new = None
         try:
-            creation_time_old = os.path.getmtime(f"{saveloc}/swtor/{assets}/{assets}.history.json")
+            creation_time_old = os.path.getmtime(f"{saveloc}/{environment_wert}/{assets}/{assets}.history.json")
         except Exception as e:
             creation_time_old = creation_time_new
         if not creation_time_new is None:
             if creation_time_old < creation_time_new:
-                os.remove(f"{saveloc}/swtor/{assets}/{assets}.history.json")
+                os.remove(f"{saveloc}/{environment_wert}/{assets}/{assets}.history.json")
         if True:
-            if not os.path.exists(f"{saveloc}/swtor/{assets}/{assets}.history.json") == True:
+            if not os.path.exists(f"{saveloc}/{environment_wert}/{assets}/{assets}.history.json") == True:
                 try:
                     zeitx1 = int(time.time())
                     sekunden1 = 0
                     dl_file1.config(text=f"Downloading:\n{url}")
-                    wget.download(url, f"{saveloc}/swtor/{assets}/", bar=bar1_progress)
+                    wget.download(url, f"{saveloc}/{environment_wert}/{assets}/", bar=bar1_progress)
                     logbox.insert(END, f"\nDownloaded: {url}\n\n")
                     creation_time = datetime.strptime(requests.get(url).headers["Last-Modified"], "%a, %d %b %Y %H:%M:%S %Z").timestamp()
-                    set_file_last_modified(f"{saveloc}/swtor/{assets}/{assets}.history.json", creation_time)
+                    set_file_last_modified(f"{saveloc}/{environment_wert}/{assets}/{assets}.history.json", creation_time)
                 except KeyboardInterrupt:
                     logbox.insert(END, "\nYou stopped the download!\n")
                     return
@@ -6716,7 +6725,7 @@ def search_versions():
                         return
 				
             try:
-                history = open(f"{saveloc}/swtor/{assets}/{assets}.history.json", "r")
+                history = open(f"{saveloc}/{environment_wert}/{assets}/{assets}.history.json", "r")
                 history_c = history.read()
                 history_content = jwt.decode(history_c, algorithms=["RS256"], options={"verify_signature": False})
                 history_content = history_content['history']
@@ -6726,7 +6735,7 @@ def search_versions():
                 version_box.delete(0, tkr.END)
                 for part in history_content:
                     version_number = ""
-                    for item in itemlist_patches[environment_wert]:
+                    for item in itemlist_patches["swtor"]:
                         if item.attributes["version"].value == part["version"]:
                             version_number = f' - {item.attributes["version_number"].value}'
                             if version_number == f' - -':
@@ -6955,17 +6964,19 @@ def check_hex():
                     return
 
             elif assets == "launcher":
-                if not os.path.exists(f"{saveloc}/swtor/{assets}/alias.json") == True:
+                if not environment_wert == "swtor-mac":
+                    environment_wert = "swtor"
+                if not os.path.exists(f"{saveloc}/{environment_wert}/{assets}/alias.json") == True:
                     try:
-                        os.makedirs(f"{saveloc}/swtor/{assets}/")
+                        os.makedirs(f"{saveloc}/{environment_wert}/{assets}/")
                     except:
                         pass
-                    url = f"http://cdn-d6patch.swtor.com/swtor/{assets}/alias.json"
+                    url = f"http://cdn-d6patch.swtor.com/{environment_wert}/{assets}/alias.json"
                     try:
                         zeitx1 = int(time.time())
                         sekunden1 = 0
                         dl_file1.config(text=f"Downloading:\n{url}")
-                        wget.download(url, f"{saveloc}/swtor/{assets}/", bar=bar1_progress)
+                        wget.download(url, f"{saveloc}/{environment_wert}/{assets}/", bar=bar1_progress)
                         logbox.insert(END, f"\nDownloaded: {url}\n\n")
                     except KeyboardInterrupt:
                         logbox.insert(END, "\nYou stopped the download!\n")
@@ -6989,10 +7000,10 @@ def check_hex():
                             return
                                     
                 try:
-                    alias = open(f"{saveloc}/swtor/{assets}/alias.json", "r")
+                    alias = open(f"{saveloc}/{environment_wert}/{assets}/alias.json", "r")
                     alias_c = alias.read()
                     alias_content = jwt.decode(alias_c, algorithms=["RS256"], options={"verify_signature": False})
-                    catalog_metafile_hex = alias_content[f"{assets}.{environment_wert}"]
+                    catalog_metafile_hex = alias_content[f"{assets}.swtor"]
                 except:
                     logbox.insert(END, "\nVersion not found!\n\n")
                     try:
@@ -7309,18 +7320,20 @@ def check_size():
 
             
             elif assets == "launcher":
+                if not environment_wert == "swtor-mac":
+                    environment_wert = "swtor"
                 if not oldversion:
-                    if not os.path.exists(f"{saveloc}/swtor/{assets}/alias.json") == True:
+                    if not os.path.exists(f"{saveloc}/{environment_wert}/{assets}/alias.json") == True:
                         try:
-                            os.makedirs(f"{saveloc}/swtor/{assets}/")
+                            os.makedirs(f"{saveloc}/{environment_wert}/{assets}/")
                         except:
                             pass
-                        url = f"http://cdn-d6patch.swtor.com/swtor/{assets}/alias.json"
+                        url = f"http://cdn-d6patch.swtor.com/{environment_wert}/{assets}/alias.json"
                         try:
                             zeitx1 = int(time.time())
                             sekunden1 = 0
                             dl_file1.config(text=f"Downloading:\n{url}")
-                            wget.download(url, f"{saveloc}/swtor/{assets}/", bar=bar1_progress)
+                            wget.download(url, f"{saveloc}/{environment_wert}/{assets}/", bar=bar1_progress)
                             logbox.insert(END, f"\nDownloaded: {url}\n\n")
                         except KeyboardInterrupt:
                             logbox.insert(END, "\nYou stopped the download!\n")
@@ -7344,10 +7357,10 @@ def check_size():
                                 return
                                         
                     try:
-                        alias = open(f"{saveloc}/swtor/{assets}/alias.json", "r")
+                        alias = open(f"{saveloc}/{environment_wert}/{assets}/alias.json", "r")
                         alias_c = alias.read()
                         alias_content = jwt.decode(alias_c, algorithms=["RS256"], options={"verify_signature": False})
-                        catalog_metafile_hex = alias_content[f"{assets}.{environment_wert}"]
+                        catalog_metafile_hex = alias_content[f"{assets}.swtor"]
                     except:
                         logbox.insert(END, "\nVersion not found!\n\n")
                         try:
@@ -7356,17 +7369,17 @@ def check_size():
                             pass
                         return
                 if True:
-                    if not os.path.exists(f"{saveloc}/swtor/{assets}/metafile/{catalog_metafile_hex}/metafile.json") == True:
+                    if not os.path.exists(f"{saveloc}/{environment_wert}/{assets}/metafile/{catalog_metafile_hex}/metafile.json") == True:
                         try:
-                            os.makedirs(f"{saveloc}/swtor/{assets}/metafile/{catalog_metafile_hex}/")
+                            os.makedirs(f"{saveloc}/{environment_wert}/{assets}/metafile/{catalog_metafile_hex}/")
                         except:
                             pass
-                        url = f"http://cdn-d6patch.swtor.com/swtor/{assets}/metafile/{catalog_metafile_hex}/metafile.json"
+                        url = f"http://cdn-d6patch.swtor.com/{environment_wert}/{assets}/metafile/{catalog_metafile_hex}/metafile.json"
                         try:
                             zeitx1 = int(time.time())
                             sekunden1 = 0
                             dl_file1.config(text=f"Downloading:\n{url}")
-                            wget.download(url, f"{saveloc}/swtor/{assets}/metafile/{catalog_metafile_hex}/", bar=bar1_progress)
+                            wget.download(url, f"{saveloc}/{environment_wert}/{assets}/metafile/{catalog_metafile_hex}/", bar=bar1_progress)
                             logbox.insert(END, f"\nDownloaded: {url}\n\n")
                         except KeyboardInterrupt:
                             logbox.insert(END, "\nYou stopped the download!\n")
@@ -7389,7 +7402,7 @@ def check_size():
                                 logbox.insert(END, "\nVersion not found!\n\n")
                                 return
                                                         
-                    metafile = open(f"{saveloc}/swtor/{assets}/metafile/{catalog_metafile_hex}/metafile.json", "r")
+                    metafile = open(f"{saveloc}/{environment_wert}/{assets}/metafile/{catalog_metafile_hex}/metafile.json", "r")
                     metafile_c = metafile.read()
                     metafile_content = jwt.decode(metafile_c, algorithms=["RS256"], options={"verify_signature": False})
                     for file in metafile_content["files"]:
@@ -7702,17 +7715,18 @@ my_label13 = tkr.Label(fenster, text=f"Download other version?:")
 
 A1 = "swtor"
 A2 = "publictest"
-#A3 = "liveqatest"
+A3 = "liveqatest"
 #A4 = "betatest"
 #A5 = "cstraining"
 #A6 = "liveeptest"
 A4 = "launcher"
-A5 = "test_001"
-A6 = "test_PROD"
+#A5 = "test_001"
+#A6 = "test_PROD"
 #A7 = "test_release_tracker"
+A5 = "swtor-mac"
 varA = tkr.StringVar()
 varA.set(ptsorlive)
-set1 = tkr.OptionMenu(fenster,varA,A1,A2,A4,A5,A6)
+set1 = tkr.OptionMenu(fenster,varA,A1,A2,A3,A4,A5)
 set1.configure(font=("Arial",25))
 
 
@@ -7745,7 +7759,6 @@ set4.configure(font=("Arial",25))
 E1 = "cdn"
 E2 = "root"
 E3 = "backup"
-
 varE = tkr.StringVar()
 varE.set(savetype)
 set5= tkr.OptionMenu(fenster,varE,E1,E2,E3)
