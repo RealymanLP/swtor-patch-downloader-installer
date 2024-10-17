@@ -34,7 +34,10 @@ dir_path = os.path.split(basis)[0]
 dirs = os.listdir(dir_path)
 for item in dirs:
     if item.endswith(".tmp"):
-        os.remove(os.path.join(dir_path, item))
+        try:
+            os.remove(os.path.join(dir_path, item))
+        except:
+            pass
 try:
     shutil.rmtree('temp', ignore_errors=True)
 except:
