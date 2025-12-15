@@ -2974,7 +2974,7 @@ def install_launcher(saveloc, language_wert, vnummerx, environment_wert, vnummer
         installloc = installzeile.get()
     logbox.insert(END, "\nStarting installation\n\n")#Press CTRL+C to stop.\n\n")
     log1_label.config(text=f"Installing...")
-    if not environment_wert == "swtor-mac":
+    if not environment_wert == "swtor-mac" and not environment_wert == "swtor-mac/public-beta":
         environment_wert = "swtor"
     if catalog_metafile_hex == None:
         try:
@@ -4388,7 +4388,7 @@ def download_launcher(saveloc, language_wert, vnummerx, environment_wert, vnumme
     except:
         selected = ""
     if True:
-        if not environment_wert == "swtor-mac":
+        if not environment_wert == "swtor-mac" and not environment_wert == "swtor-mac/public-beta":
             environment_wert = "swtor"
         if catalog_metafile_hex is None:
             if savetype == "cdn":
@@ -6127,7 +6127,7 @@ def check_date():
                     pass
 
             elif assets == "launcher":
-                if not environment_wert == "swtor-mac":
+                if not environment_wert == "swtor-mac" and not environment_wert == "swtor-mac/public-beta":
                     environment_wert = "swtor"
                 if not oldversion:
                     if not os.path.exists(f"{saveloc}/{environment_wert}/{assets}/alias.json") == True:
@@ -6678,7 +6678,7 @@ def search_versions():
                 return
 
     elif assets == "launcher":
-        if not environment_wert == "swtor-mac":
+        if not environment_wert == "swtor-mac" and not environment_wert == "swtor-mac/public-beta":
             environment_wert = "swtor"
         try:
             os.makedirs(f"{saveloc}/{environment_wert}/{assets}/")
@@ -6967,7 +6967,7 @@ def check_hex():
                     return
 
             elif assets == "launcher":
-                if not environment_wert == "swtor-mac":
+                if not environment_wert == "swtor-mac" and not environment_wert == "swtor-mac/public-beta":
                     environment_wert = "swtor"
                 if not os.path.exists(f"{saveloc}/{environment_wert}/{assets}/alias.json") == True:
                     try:
@@ -7323,7 +7323,7 @@ def check_size():
 
             
             elif assets == "launcher":
-                if not environment_wert == "swtor-mac":
+                if not environment_wert == "swtor-mac" and not environment_wert == "swtor-mac/public-beta":
                     environment_wert = "swtor"
                 if not oldversion:
                     if not os.path.exists(f"{saveloc}/{environment_wert}/{assets}/alias.json") == True:
@@ -7727,9 +7727,10 @@ A4 = "launcher"
 #A6 = "test_PROD"
 #A7 = "test_release_tracker"
 A5 = "swtor-mac"
+A6 = "swtor-mac/public-beta"
 varA = tkr.StringVar()
 varA.set(ptsorlive)
-set1 = tkr.OptionMenu(fenster,varA,A1,A2,A3,A4,A5)
+set1 = tkr.OptionMenu(fenster,varA,A1,A2,A3,A4,A5,A6)
 set1.configure(font=("Arial",25))
 
 
@@ -7821,11 +7822,11 @@ welcom_button.place(x=40, y=535)
 #solidbutton.place(x=275, y=630)
 exit_button.place(x=275, y=535)
 log1_label.place(x=40, y=630)
-set4.place(x=250, y=35)
-set1.place(x=250, y=100) 
-set3.place(x=250, y=165)
+set4.place(x=230, y=35)
+set1.place(x=165, y=100) 
+set3.place(x=230, y=165)
 #set2.place(x=250, y=230)
-set5.place(x=250, y=355)
+set5.place(x=230, y=355)
 my_label13.place(x=500, y=35)
 allow_oldversion_check.place(x=640, y=35)
 version_box.place(x=500, y=60)
